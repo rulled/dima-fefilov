@@ -137,7 +137,7 @@ nav a:hover::after {
 
 /* Responsive Header & Hamburger Menu */
 .nav-toggle {
-    display: none; /* Hidden by default, shown on mobile */
+    display: none; /* Hidden by default, shown on mobile via media query */
     background: transparent;
     border: none;
     cursor: pointer;
@@ -186,14 +186,16 @@ nav a:hover::after {
     transform: rotate(-45deg);
 }
 
-/* Scrolled header state */
-header.scrolled .nav-links {
-    display: none; /* Hide regular nav links when scrolled on mobile */
+/* Scrolled header state - general styling for a scrolled header if needed */
+header.scrolled {
+    /* Styles for header when scrolled, e.g., slightly smaller padding or shadow change */
+    /* This class is added by JS when scrollTop > 50 */
 }
 
-header.scrolled .nav-toggle {
-    display: block; /* Show hamburger when scrolled */
-}
+/* IMPORTANT: The following rules for .nav-links and .nav-toggle within header.scrolled 
+   SHOULD BE INSIDE the mobile media query if they are mobile-specific behaviors.
+   If they were outside, they would wrongly affect desktop.
+*/
 
 /* Hero Section with Glassmorphism */
 .hero {
@@ -621,13 +623,14 @@ header.scrolled .nav-toggle {
         box-shadow: var(--glassmorphism-shadow);
         padding: 1rem 0;
         border-top: var(--glassmorphism-border);
+        z-index: 999;
     }
 
     nav .nav-links.active {
         display: flex;
     }
     
-    nav ul {
+    nav ul.nav-links {
         flex-direction: column;
         align-items: center;
         width: 100%;
@@ -673,6 +676,14 @@ header.scrolled .nav-toggle {
         width: 80px;
         height: 6px;
         transform: none;
+    }
+
+    /* Scrolled state specific to mobile */
+    header.scrolled .nav-links:not(.active) {
+        display: none;
+    }
+    header.scrolled .nav-toggle {
+        display: block;
     }
 }
 
@@ -819,20 +830,33 @@ footer {
     
     .player-controls {
         flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .play-button {
+        order: 1;
     }
     
     .volume-control {
         display: block;
+        width: 100%;
+        margin-top: 8px;
+        order: 4;
     }
     
     .time {
         order: 2;
         width: auto;
-        margin-left: auto;
+        margin-left: 0;
+        margin-right: 5px;
+    }
+    
+    .total-time {
+        order: 3;
     }
     
     .progress-container {
-        order: 3;
+        order: 5;
         flex-basis: 100%;
         margin-top: 10px;
     }
