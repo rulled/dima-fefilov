@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Responsive Header: Sticky shrink on scroll
-    // let lastScrollTop = 0; // This variable is not used in the provided scroll logic, can be removed or used for up/down scroll detection
     window.addEventListener('scroll', () => {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         if (scrollTop > 50) { 
@@ -21,11 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             header.classList.remove('scrolled');
         }
-        // lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Update if using lastScrollTop
     }, false);
 
     // 3D Tilt Effect for About Image - Conditional based on screen size
-    if (aboutImage) { // Check if aboutImage exists first
+    if (aboutImage) { 
         const mediaQuery = window.matchMedia('(min-width: 769px)');
 
         function handleTiltEffect(e) {
@@ -45,30 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function setupTiltListeners() {
             if (mediaQuery.matches) {
-                aboutImage.style.transition = 'transform 0.1s ease-out'; // Shorter transition for responsiveness
+                aboutImage.style.transition = 'transform 0.1s ease-out'; 
                 aboutImage.addEventListener('mousemove', handleTiltEffect);
                 aboutImage.addEventListener('mouseleave', resetTiltEffect);
             } else {
                 aboutImage.removeEventListener('mousemove', handleTiltEffect);
                 aboutImage.removeEventListener('mouseleave', resetTiltEffect);
-                aboutImage.style.transform = ''; // Reset any existing transform
-                aboutImage.style.transition = ''; // Reset transition
+                aboutImage.style.transform = ''; 
+                aboutImage.style.transition = ''; 
             }
         }
 
-        setupTiltListeners(); // Initial setup
-        mediaQuery.addEventListener('change', setupTiltListeners); // Listen for changes in screen size
+        setupTiltListeners(); 
+        mediaQuery.addEventListener('change', setupTiltListeners); 
     }
 
-    // Инициализация аудио-плееров
     const audioElements = document.querySelectorAll('audio');
     const playButtons = document.querySelectorAll('.play-button');
     const comparisonToggleBtns = document.querySelectorAll('.comparison-toggle');
     
-    // Глобальная переменная для текущего проигрываемого плеера
     let currentlyPlaying = null;
     
-    // Добавляем анимацию для карточек при прокрутке
     const observeElements = () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -84,18 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
     
-    // Вызываем функцию анимации при прокрутке, если поддерживается
     if ('IntersectionObserver' in window) {
         observeElements();
     }
     
-    // Инициализация всех переключателей сравнения
     comparisonToggleBtns.forEach(btn => {
         btn.setAttribute('data-state', 'before');
         initializeComparisonToggle(btn);
     });
     
-    // Инициализация всех плееров
     audioElements.forEach(audio => {
         const trackId = audio.id;
         const progressBar = document.getElementById(`progress-${trackId}`);
@@ -105,18 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const volumeControl = audio.parentElement.querySelector('.volume-control');
         const volumeSlider = volumeControl?.querySelector('.volume-slider');
         
-        // Установка начального источника аудио
-        // Проверяем, имеет ли этот трек атрибуты "до" и "после"
         if (audio.hasAttribute('data-before') && audio.hasAttribute('data-after')) {
             audio.src = audio.getAttribute('data-before');
         }
-        // Если нет атрибутов "до" и "после", то src уже должен быть установлен в HTML
         
-        // Инициализация обработчиков событий для плеера
         initializePlayer(audio, playButton, progressBar, progressContainer, timeDisplay, volumeControl, volumeSlider);
     });
     
-    // Функция инициализации переключателя версий трека
     function initializeComparisonToggle(toggleBtn) {
         const trackId = toggleBtn.getAttribute('data-track-id');
         const audio = document.getElementById(trackId);
@@ -126,10 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const isPlaying = !audio.paused;
             const currentTime = audio.currentTime;
             
-            // Добавляем анимацию для переключения
             toggleBtn.classList.add('switching');
             
-            // Переключаем состояние
             if (currentState === 'before') {
                 toggleBtn.setAttribute('data-state', 'after');
                 audio.src = audio.getAttribute('data-after');
@@ -138,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 audio.src = audio.getAttribute('data-before');
             }
             
-            // Восстанавливаем время воспроизведения и состояние проигрывания
             audio.addEventListener('loadedmetadata', function onceLoaded() {
                 audio.currentTime = currentTime;
                 if (isPlaying) {
@@ -146,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 audio.removeEventListener('loadedmetadata', onceLoaded);
                 
-                // Удаляем класс анимации после завершения
                 setTimeout(() => {
                     toggleBtn.classList.remove('switching');
                 }, 300);
@@ -154,18 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Функция инициализации аудио-плеера
     function initializePlayer(audio, playButton, progressBar, progressContainer, timeDisplay, volumeControl, volumeSlider) {
-        // Обработчик нажатия кнопки воспроизведения
         playButton.addEventListener('click', () => {
             if (audio.paused) {
-                // Если какой-то трек уже играет, останавливаем его
                 if (currentlyPlaying && currentlyPlaying !== audio) {
                     currentlyPlaying.pause();
-                    document.querySelector(`.play-button[data-player="${currentlyPlaying.id}"]`).classList.remove('playing');
+                    const oldPlayButton = document.querySelector(`.play-button[data-player="${currentlyPlaying.id}"]`);
+                    if (oldPlayButton) oldPlayButton.classList.remove('playing');
+                    const oldTrackCard = oldPlayButton?.closest('.track-card');
+                    if (oldTrackCard) oldTrackCard.classList.remove('playing-card');
                 }
                 
-                // Добавляем анимацию для карточки при воспроизведении
                 const trackCard = playButton.closest('.track-card');
                 if (trackCard) {
                     trackCard.classList.add('playing-card');
@@ -173,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 audio.play().catch(error => {
                     console.error('Ошибка воспроизведения:', error);
-                    // Добавляем обработку ошибок воспроизведения
                     if (error.name === 'NotAllowedError') {
                         alert('Автоматическое воспроизведение заблокировано браузером. Пожалуйста, взаимодействуйте со страницей для продолжения.');
                     }
@@ -185,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 playButton.classList.remove('playing');
                 currentlyPlaying = null;
                 
-                // Удаляем анимацию карточки при паузе
                 const trackCard = playButton.closest('.track-card');
                 if (trackCard) {
                     trackCard.classList.remove('playing-card');
@@ -193,20 +173,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Обновление прогресс-бара во время воспроизведения
         audio.addEventListener('timeupdate', () => {
             if (audio.duration) {
                 const progress = (audio.currentTime / audio.duration) * 100;
                 progressBar.style.width = `${progress}%`;
                 
-                // Обновление отображения времени
                 const minutes = Math.floor(audio.currentTime / 60);
                 const seconds = Math.floor(audio.currentTime % 60);
                 timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
         });
         
-        // Перемотка трека при клике на прогресс-бар
         progressContainer.addEventListener('click', (e) => {
             const rect = progressContainer.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -218,22 +195,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Дополнительное слежение за прогресс-баром для мобильных устройств
         let isDragging = false;
         
         progressContainer.addEventListener('touchstart', (e) => {
             isDragging = true;
             updateProgressFromTouch(e);
-        });
+        }, { passive: true });
         
-        window.addEventListener('touchmove', (e) => {
+        progressContainer.addEventListener('touchmove', (e) => {
             if (isDragging) {
                 updateProgressFromTouch(e);
             }
-        });
+        }, { passive: true });
         
         window.addEventListener('touchend', () => {
-            isDragging = false;
+            if (isDragging) {
+                isDragging = false;
+            }
         });
         
         function updateProgressFromTouch(e) {
@@ -244,7 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const width = rect.width;
             let percentage = touchX / width;
             
-            // Убедимся, что значение находится в пределах от 0 до 1
             percentage = Math.max(0, Math.min(1, percentage));
             
             if (audio.duration) {
@@ -252,140 +229,100 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Регулировка громкости
         if (volumeSlider) {
-            // Инвертируем значения для вертикального слайдера (0 = сверху, 1 = снизу)
-            // Чтобы логика была естественной: вверх - громче, вниз - тише
-            
             volumeSlider.addEventListener('input', () => {
-                // Инвертируем значение для вертикального слайдера
                 const volumeValue = parseFloat(volumeSlider.value);
-                
-                // Устанавливаем громкость (0-1)
                 audio.volume = volumeValue;
-                
-                // Сохраняем громкость в localStorage для всех плееров
                 localStorage.setItem('audio-volume', volumeValue);
                 
-                // Обновляем громкость на всех остальных плеерах
                 document.querySelectorAll('.volume-slider').forEach(slider => {
-                    slider.value = volumeValue;
+                    if (slider !== volumeSlider) slider.value = volumeValue;
                 });
                 document.querySelectorAll('audio').forEach(otherAudio => {
-                    otherAudio.volume = volumeValue;
+                    if (otherAudio !== audio) otherAudio.volume = volumeValue;
                 });
             });
             
-            // Восстанавливаем сохраненную громкость или устанавливаем начальную
             const savedVolume = localStorage.getItem('audio-volume');
             if (savedVolume !== null) {
                 volumeSlider.value = savedVolume;
                 audio.volume = savedVolume;
             } else {
-                // Устанавливаем дефолтную громкость на 80%
                 volumeSlider.value = "0.8";
                 audio.volume = 0.8;
             }
-            
-            // Дополнительные обработчики для улучшения взаимодействия со слайдером
-            volumeSlider.addEventListener('mousedown', (e) => {
-                e.stopPropagation();
-            });
-            
-            volumeSlider.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-            });
         }
         
-        // Обработка окончания трека
         audio.addEventListener('ended', () => {
             playButton.classList.remove('playing');
             progressBar.style.width = '0%';
             timeDisplay.textContent = '00:00';
             currentlyPlaying = null;
             
-            // Удаляем анимацию карточки при окончании
             const trackCard = playButton.closest('.track-card');
             if (trackCard) {
                 trackCard.classList.remove('playing-card');
             }
         });
         
-        // Обработка ошибок загрузки аудио
         audio.addEventListener('error', (e) => {
             console.error('Ошибка загрузки аудио:', e);
-            alert(`Ошибка загрузки трека: ${audio.src}`);
+            // Consider a more user-friendly error message on the UI itself
+            // alert(`Ошибка загрузки трека: ${audio.src}`);
         });
         
-        // Показываем общую длительность трека
         const totalTimeDisplay = audio.parentElement.querySelector('.total-time');
         audio.addEventListener('loadedmetadata', () => {
             const totalDuration = audio.duration;
-            const totalMinutes = Math.floor(totalDuration / 60);
-            const totalSeconds = Math.floor(totalDuration % 60);
-            const formattedTotalTime = `${totalMinutes.toString().padStart(2, '0')}:${totalSeconds.toString().padStart(2, '0')}`;
-            if (totalTimeDisplay) totalTimeDisplay.textContent = ` / ${formattedTotalTime}`;
+            if (isFinite(totalDuration)) {
+                const totalMinutes = Math.floor(totalDuration / 60);
+                const totalSeconds = Math.floor(totalDuration % 60);
+                const formattedTotalTime = `${totalMinutes.toString().padStart(2, '0')}:${totalSeconds.toString().padStart(2, '0')}`;
+                if (totalTimeDisplay) totalTimeDisplay.textContent = ` / ${formattedTotalTime}`;
+            } else {
+                 if (totalTimeDisplay) totalTimeDisplay.textContent = ` / --:--`;
+            }
             timeDisplay.textContent = `00:00`;
         });
         
-        // Оптимизация для мобильных устройств
-        if ('ontouchstart' in window) {
-            // Обеспечиваем интерактивность регулятора громкости на мобильных
-            if (volumeControl) {
-                volumeControl.addEventListener('touchstart', (e) => {
-                    e.stopPropagation();
-                    volumeControl.classList.add('touched');
-                });
-                
-                document.addEventListener('touchend', () => {
-                    setTimeout(() => {
-                        volumeControl.classList.remove('touched');
-                    }, 1500); // Задержка, чтобы пользователь успел взаимодействовать
-                });
-            }
-        }
-
         const volumeButton = volumeControl?.querySelector('.volume-button');
         const volumeSliderContainer = volumeControl?.querySelector('.volume-slider-container');
 
-        // Новый механизм показа/скрытия слайдера громкости
         if (volumeButton && volumeSliderContainer) {
             volumeButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 volumeSliderContainer.classList.toggle('active');
             });
             
-            document.addEventListener('mousedown', (e) => {
+            // Changed mousedown to click for better cross-device compatibility
+            document.addEventListener('click', (e) => {
                 if (volumeSliderContainer.classList.contains('active') && !volumeControl.contains(e.target)) {
                     volumeSliderContainer.classList.remove('active');
                 }
             });
             
-            // Дополнительные обработчики для улучшения взаимодействия со слайдером
-            volumeSlider.addEventListener('input', (e) => {
-                e.stopPropagation();
-                // Остальной код остается
-            });
-            
-            // Предотвращение скрытия при взаимодействии со слайдером
-            volumeSlider.addEventListener('mousedown', (e) => {
-                e.stopPropagation();
-            });
-            
-            volumeSlider.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-            });
+            if (volumeSlider) { // Ensure volumeSlider exists before adding listeners
+                volumeSlider.addEventListener('input', (e) => {
+                    e.stopPropagation();
+                });
+                
+                volumeSlider.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                });
+                
+                volumeSlider.addEventListener('touchstart', (e) => {
+                    e.stopPropagation();
+                }, { passive: true });
+            }
         }
     }
     
-    // Дополнительные улучшения UI
-    // Отключаем контекстное меню для аудио-контролов
     document.querySelectorAll('.audio-player').forEach(player => {
         player.addEventListener('contextmenu', (e) => {
             e.preventDefault();
         });
     });
     
-    // Оптимизация для iOS Safari
+    // Passive touchstart for performance on scroll, etc.
     document.addEventListener('touchstart', () => {}, { passive: true });
-}); 
+});
