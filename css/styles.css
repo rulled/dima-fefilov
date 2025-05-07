@@ -623,11 +623,18 @@ header.scrolled {
         box-shadow: var(--glassmorphism-shadow);
         padding: 1rem 0;
         border-top: var(--glassmorphism-border);
-        z-index: 999;
+        z-index: 1002;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        pointer-events: none;
     }
 
     nav .nav-links.active {
-        display: flex;
+        display: flex !important;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
     }
     
     nav ul.nav-links {
@@ -838,10 +845,7 @@ footer {
     }
     
     .volume-control {
-        display: block;
-        width: 100%;
-        margin-top: 8px;
-        order: 4;
+        display: none !important;
     }
     
     .time {

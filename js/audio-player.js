@@ -24,28 +24,40 @@ document.addEventListener('DOMContentLoaded', () => {
         // lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Update if using lastScrollTop
     }, false);
 
-    // 3D Tilt Effect for About Image
-    if (aboutImage) {
-        // Set a transition for smooth effect reset on mouseleave
-        aboutImage.style.transition = 'transform 0.3s ease-out';
+    // 3D Tilt Effect for About Image - Conditional based on screen size
+    if (aboutImage) { // Check if aboutImage exists first
+        const mediaQuery = window.matchMedia('(min-width: 769px)');
 
-        aboutImage.addEventListener('mousemove', (e) => {
+        function handleTiltEffect(e) {
             const rect = aboutImage.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-
-            const rotateX = ((y - centerY) / centerY) * 7; // Reduced max rotation to 7 degrees
-            const rotateY = -((x - centerX) / centerX) * 7; // Reduced max rotation to 7 degrees
-
+            const rotateX = ((y - centerY) / centerY) * 7;
+            const rotateY = -((x - centerX) / centerX) * 7;
             aboutImage.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        });
+        }
 
-        aboutImage.addEventListener('mouseleave', () => {
+        function resetTiltEffect() {
             aboutImage.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-        });
+        }
+
+        function setupTiltListeners() {
+            if (mediaQuery.matches) {
+                aboutImage.style.transition = 'transform 0.1s ease-out'; // Shorter transition for responsiveness
+                aboutImage.addEventListener('mousemove', handleTiltEffect);
+                aboutImage.addEventListener('mouseleave', resetTiltEffect);
+            } else {
+                aboutImage.removeEventListener('mousemove', handleTiltEffect);
+                aboutImage.removeEventListener('mouseleave', resetTiltEffect);
+                aboutImage.style.transform = ''; // Reset any existing transform
+                aboutImage.style.transition = ''; // Reset transition
+            }
+        }
+
+        setupTiltListeners(); // Initial setup
+        mediaQuery.addEventListener('change', setupTiltListeners); // Listen for changes in screen size
     }
 
     // Инициализация аудио-плееров
