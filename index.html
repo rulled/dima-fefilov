@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дима Фефилов | Звукорежиссура</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Дима Фефилов</h1>
+            <nav>
+                <ul>
+                    <li><a href="#about">Обо мне</a></li>
+                    <li><a href="#work">Работы</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Звукорежиссура на профессиональном уровне</h2>
+            <p>Превращаю хорошие записи в великолепное звучание</p>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Обо мне</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Я профессиональный звукорежиссер с опытом работы в различных музыкальных жанрах. Моя цель — подчеркнуть индивидуальность вашей музыки и придать ей профессиональное звучание.</p>
+                    <p>Работаю с артистами любого уровня, от начинающих до профессионалов. Каждый проект для меня — возможность создать нечто особенное.</p>
+                </div>
+                <div class="about-image">
+                    <!-- Здесь будет ваше фото -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="work" class="work">
+        <div class="container">
+            <h2>Мои работы</h2>
+            <div class="tracks-container">
+                <!-- Трек 1: До/После обработки -->
+                <div class="track-card">
+                    <h3>Пример обработки</h3>
+                    <p>До и после сведения</p>
+                    <div class="audio-player">
+                        <div class="comparison-controls">
+                            <button class="comparison-toggle" data-track-id="track1">
+                                <span class="toggle-text">До</span>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-text">После</span>
+                            </button>
+                        </div>
+                        <div class="player">
+                            <audio id="track1" data-before="audio/track1-before.mp3" data-after="audio/track1-after.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track1"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track1"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Живой инструментал -->
+                <div class="track-card">
+                    <h3>Живой инструментал</h3>
+                    <p>Гитара записана другим человеком; бас, ударные, синт-мелодия, сведение и аранжировка - мои</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track2" src="audio/Работа над живым инструменталом (гитара записана другим человеком; бас, ударные, синт-мелодия, сведение и аранжировка - мои).mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track2"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track2"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Современный жанр -->
+                <div class="track-card">
+                    <h3>Dance-Phonk</h3>
+                    <p>Пример работы в современном жанре</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track3" src="audio/Пример работы в современном жанре (Dance-Phonk).mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track3"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track3"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Рекламная песня -->
+                <div class="track-card">
+                    <h3>Рекламная песня</h3>
+                    <p>Пример для коммерческого использования</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track4" src="audio/Пример рекламной песни.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track4"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track4"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Сольная песня -->
+                <div class="track-card">
+                    <h3>Сольная песня</h3>
+                    <p>Авторская композиция</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track5" src="audio/Пример сольной песни.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track5"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track5"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Стилизация -->
+                <div class="track-card">
+                    <h3>Стилизация</h3>
+                    <p>Стилизация под старый рингтон</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track6" src="audio/Стилизация под старый рингтон.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track6"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track6"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Семплирование -->
+                <div class="track-card">
+                    <h3>Семплирование</h3>
+                    <p>Пример работы с семплами</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track7" src="audio/Пример семплирования.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track7"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track7"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Атмосферный эмбиент 1 -->
+                <div class="track-card">
+                    <h3>Атмосферный эмбиент</h3>
+                    <p>Пример 1</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track8" src="audio/Атмосферный эмбиент пример 1.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track8"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track8"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Атмосферный эмбиент 2 -->
+                <div class="track-card">
+                    <h3>Атмосферный эмбиент</h3>
+                    <p>Пример 2</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track9" src="audio/Атмосферный эмбиент пример 2.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track9"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track9"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Атмосферный эмбиент 3 -->
+                <div class="track-card">
+                    <h3>Атмосферный эмбиент</h3>
+                    <p>Пример 3</p>
+                    <div class="audio-player">
+                        <div class="player">
+                            <audio id="track10" src="audio/Атмосферный эмбиент пример 3.mp3"></audio>
+                            <div class="player-controls">
+                                <button class="play-button" data-player="track10"></button>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progress-track10"></div>
+                                </div>
+                                <div class="volume-control">
+                                    <button class="volume-button"></button>
+                                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                                </div>
+                                <div class="time">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Связаться со мной</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p>Напишите мне, и мы обсудим ваш проект:</p>
+                    <ul>
+                        <li>Email: <a href="mailto:example@example.com">example@example.com</a></li>
+                        <li>Telegram: <a href="https://t.me/username" target="_blank">@username</a></li>
+                        <li>Instagram: <a href="https://instagram.com/username" target="_blank">@username</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Дима Фефилов. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="js/audio-player.js"></script>
+</body>
+</html> 
