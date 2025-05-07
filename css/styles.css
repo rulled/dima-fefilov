@@ -507,6 +507,7 @@ nav a:hover::after {
     outline: none;
     border-radius: 2px;
     transform: rotate(180deg);
+    pointer-events: all;
 }
 
 .volume-slider::-webkit-slider-thumb {

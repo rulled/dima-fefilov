@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 volumeSliderContainer.classList.toggle('active');
             });
-            document.addEventListener('click', (e) => {
+            document.addEventListener('mousedown', (e) => {
                 if (volumeSliderContainer.classList.contains('active') && !volumeControl.contains(e.target)) {
                     volumeSliderContainer.classList.remove('active');
                 }
