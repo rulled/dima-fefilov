@@ -472,7 +472,7 @@ nav a:hover::after {
 .volume-slider-container {
     opacity: 0;
     height: 0;
-    width: 30px;
+    width: 40px;
     pointer-events: none;
     transition: height 0.3s ease, opacity 0.3s ease, transform 0.3s ease, width 0.3s ease;
     position: absolute;
@@ -480,6 +480,10 @@ nav a:hover::after {
     bottom: 100%;
     transform: translateX(-50%) translateY(10px);
     z-index: 1;
+    background-color: rgba(240, 240, 240, 0.9);
+    border-radius: 10px;
+    padding: 10px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 /* Показываем по .active */
@@ -490,44 +494,81 @@ nav a:hover::after {
     transform: translateX(-50%) translateY(0);
 }
 
+@media (prefers-color-scheme: dark) {
+    .volume-slider-container {
+        background-color: rgba(60, 60, 60, 0.9);
+    }
+    
+    .volume-slider {
+        background-color: #555;
+    }
+}
+
+/* Мобильная версия слайдера */
 @media (max-width: 768px) {
     .volume-slider-container.active {
-        width: 100px;
-        height: 30px;
+        width: 120px;
+        height: 40px;
         transform: translateY(-50%) translateX(0);
+        padding: 0 10px;
+    }
+    
+    .volume-slider {
+        width: 80px;
+        height: 8px;
+        transform: none;
     }
 }
 
 .volume-slider {
-    width: 4px;
+    width: 8px;
     height: 80px;
     -webkit-appearance: none;
     appearance: none;
-    background-color: var(--light-gray);
+    background-color: #ccc;
     outline: none;
-    border-radius: 2px;
+    border-radius: 4px;
     transform: rotate(180deg);
     pointer-events: all;
+    margin: 0 auto;
+    display: block;
+    padding: 0;
+    position: relative;
+    cursor: pointer;
 }
 
 .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 12px;
-    height: 12px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background-color: var(--accent-color);
     cursor: pointer;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transform: scale(1);
+    transition: transform 0.1s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover,
+.volume-slider:active::-webkit-slider-thumb {
+    transform: scale(1.2);
 }
 
 .volume-slider::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background-color: var(--accent-color);
     cursor: pointer;
     border: none;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transform: scale(1);
+    transition: transform 0.1s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover,
+.volume-slider:active::-moz-range-thumb {
+    transform: scale(1.2);
 }
 
 /* Для времени и общей длительности */

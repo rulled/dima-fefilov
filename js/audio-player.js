@@ -275,10 +275,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 volumeSliderContainer.classList.toggle('active');
             });
+            
             document.addEventListener('mousedown', (e) => {
                 if (volumeSliderContainer.classList.contains('active') && !volumeControl.contains(e.target)) {
                     volumeSliderContainer.classList.remove('active');
                 }
+            });
+            
+            // Дополнительные обработчики для улучшения взаимодействия со слайдером
+            volumeSlider.addEventListener('input', (e) => {
+                e.stopPropagation();
+                // Остальной код остается
+            });
+            
+            // Предотвращение скрытия при взаимодействии со слайдером
+            volumeSlider.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
+            
+            volumeSlider.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
             });
         }
     }
