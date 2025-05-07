@@ -7,6 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Глобальная переменная для текущего проигрываемого плеера
     let currentlyPlaying = null;
     
+    // Добавляем анимацию для карточек при прокрутке
+    const observeElements = () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.track-card').forEach(card => {
+            observer.observe(card);
+        });
+    };
+    
+    // Вызываем функцию анимации при прокрутке, если поддерживается
+    if ('IntersectionObserver' in window) {
+        observeElements();
+    }
+    
     // Инициализация всех переключателей сравнения
     comparisonToggleBtns.forEach(btn => {
         btn.setAttribute('data-state', 'before');
@@ -20,7 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const timeDisplay = audio.parentElement.querySelector('.time');
         const playButton = document.querySelector(`.play-button[data-player="${trackId}"]`);
         const progressContainer = audio.parentElement.querySelector('.progress-container');
-        const volumeSlider = audio.parentElement.querySelector('.volume-slider');
+        const volumeControl = audio.parentElement.querySelector('.volume-control');
+        const volumeSlider = volumeControl?.querySelector('.volume-slider');
         
         // Установка начального источника аудио
         // Проверяем, имеет ли этот трек атрибуты "до" и "после"
@@ -30,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Если нет атрибутов "до" и "после", то src уже должен быть установлен в HTML
         
         // Инициализация обработчиков событий для плеера
-        initializePlayer(audio, playButton, progressBar, progressContainer, timeDisplay, volumeSlider);
+        initializePlayer(audio, playButton, progressBar, progressContainer, timeDisplay, volumeControl, volumeSlider);
     });
     
     // Функция инициализации переключателя версий трека
@@ -42,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentState = toggleBtn.getAttribute('data-state');
             const isPlaying = !audio.paused;
             const currentTime = audio.currentTime;
+            
+            // Добавляем анимацию для переключения
+            toggleBtn.classList.add('switching');
             
             // Переключаем состояние
             if (currentState === 'before') {
@@ -56,15 +81,20 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.addEventListener('loadedmetadata', function onceLoaded() {
                 audio.currentTime = currentTime;
                 if (isPlaying) {
-                    audio.play();
+                    audio.play().catch(e => console.error('Ошибка воспроизведения:', e));
                 }
                 audio.removeEventListener('loadedmetadata', onceLoaded);
+                
+                // Удаляем класс анимации после завершения
+                setTimeout(() => {
+                    toggleBtn.classList.remove('switching');
+                }, 300);
             });
         });
     }
     
     // Функция инициализации аудио-плеера
-    function initializePlayer(audio, playButton, progressBar, progressContainer, timeDisplay, volumeSlider) {
+    function initializePlayer(audio, playButton, progressBar, progressContainer, timeDisplay, volumeControl, volumeSlider) {
         // Обработчик нажатия кнопки воспроизведения
         playButton.addEventListener('click', () => {
             if (audio.paused) {
@@ -72,6 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentlyPlaying && currentlyPlaying !== audio) {
                     currentlyPlaying.pause();
                     document.querySelector(`.play-button[data-player="${currentlyPlaying.id}"]`).classList.remove('playing');
+                }
+                
+                // Добавляем анимацию для карточки при воспроизведении
+                const trackCard = playButton.closest('.track-card');
+                if (trackCard) {
+                    trackCard.classList.add('playing-card');
                 }
                 
                 audio.play().catch(error => {
@@ -87,6 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 audio.pause();
                 playButton.classList.remove('playing');
                 currentlyPlaying = null;
+                
+                // Удаляем анимацию карточки при паузе
+                const trackCard = playButton.closest('.track-card');
+                if (trackCard) {
+                    trackCard.classList.remove('playing-card');
+                }
             }
         });
         
@@ -115,14 +157,65 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
+        // Дополнительное слежение за прогресс-баром для мобильных устройств
+        let isDragging = false;
+        
+        progressContainer.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            updateProgressFromTouch(e);
+        });
+        
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                updateProgressFromTouch(e);
+            }
+        });
+        
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+        
+        function updateProgressFromTouch(e) {
+            if (!e.touches[0]) return;
+            
+            const rect = progressContainer.getBoundingClientRect();
+            const touchX = e.touches[0].clientX - rect.left;
+            const width = rect.width;
+            let percentage = touchX / width;
+            
+            // Убедимся, что значение находится в пределах от 0 до 1
+            percentage = Math.max(0, Math.min(1, percentage));
+            
+            if (audio.duration) {
+                audio.currentTime = percentage * audio.duration;
+            }
+        }
+        
         // Регулировка громкости
         if (volumeSlider) {
             volumeSlider.addEventListener('input', () => {
                 audio.volume = volumeSlider.value;
+                
+                // Сохраняем громкость в localStorage для всех плееров
+                localStorage.setItem('audio-volume', volumeSlider.value);
+                
+                // Обновляем громкость на всех остальных плеерах
+                document.querySelectorAll('.volume-slider').forEach(slider => {
+                    slider.value = volumeSlider.value;
+                });
+                document.querySelectorAll('audio').forEach(otherAudio => {
+                    otherAudio.volume = volumeSlider.value;
+                });
             });
             
-            // Установка начальной громкости
-            audio.volume = volumeSlider.value;
+            // Восстанавливаем сохраненную громкость или устанавливаем начальную
+            const savedVolume = localStorage.getItem('audio-volume');
+            if (savedVolume !== null) {
+                volumeSlider.value = savedVolume;
+                audio.volume = savedVolume;
+            } else {
+                audio.volume = volumeSlider.value;
+            }
         }
         
         // Обработка окончания трека
@@ -131,6 +224,12 @@ document.addEventListener('DOMContentLoaded', () => {
             progressBar.style.width = '0%';
             timeDisplay.textContent = '00:00';
             currentlyPlaying = null;
+            
+            // Удаляем анимацию карточки при окончании
+            const trackCard = playButton.closest('.track-card');
+            if (trackCard) {
+                trackCard.classList.remove('playing-card');
+            }
         });
         
         // Обработка ошибок загрузки аудио
@@ -145,5 +244,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalSeconds = Math.floor(audio.duration % 60);
             timeDisplay.textContent = `00:00`;
         });
+        
+        // Оптимизация для мобильных устройств
+        if ('ontouchstart' in window) {
+            // Обеспечиваем интерактивность регулятора громкости на мобильных
+            if (volumeControl) {
+                volumeControl.addEventListener('touchstart', (e) => {
+                    e.stopPropagation();
+                    volumeControl.classList.add('touched');
+                });
+                
+                document.addEventListener('touchend', () => {
+                    setTimeout(() => {
+                        volumeControl.classList.remove('touched');
+                    }, 1500); // Задержка, чтобы пользователь успел взаимодействовать
+                });
+            }
+        }
     }
+    
+    // Дополнительные улучшения UI
+    // Отключаем контекстное меню для аудио-контролов
+    document.querySelectorAll('.audio-player').forEach(player => {
+        player.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    });
+    
+    // Оптимизация для iOS Safari
+    document.addEventListener('touchstart', () => {}, { passive: true });
 }); 
