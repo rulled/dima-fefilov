@@ -1,4 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('header');
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('nav .nav-links');
+    const aboutImage = document.querySelector('.about-image');
+
+    // Responsive Header: Toggle nav menu
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            document.body.classList.toggle('nav-open'); 
+        });
+    }
+
+    // Responsive Header: Sticky shrink on scroll
+    // let lastScrollTop = 0; // This variable is not used in the provided scroll logic, can be removed or used for up/down scroll detection
+    window.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > 50) { 
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+        // lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Update if using lastScrollTop
+    }, false);
+
+    // 3D Tilt Effect for About Image
+    if (aboutImage) {
+        // Set a transition for smooth effect reset on mouseleave
+        aboutImage.style.transition = 'transform 0.3s ease-out';
+
+        aboutImage.addEventListener('mousemove', (e) => {
+            const rect = aboutImage.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * 7; // Reduced max rotation to 7 degrees
+            const rotateY = -((x - centerX) / centerX) * 7; // Reduced max rotation to 7 degrees
+
+            aboutImage.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        });
+
+        aboutImage.addEventListener('mouseleave', () => {
+            aboutImage.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+    }
+
     // Инициализация аудио-плееров
     const audioElements = document.querySelectorAll('audio');
     const playButtons = document.querySelectorAll('.play-button');

@@ -135,6 +135,66 @@ nav a:hover::after {
     width: 100%;
 }
 
+/* Responsive Header & Hamburger Menu */
+.nav-toggle {
+    display: none; /* Hidden by default, shown on mobile */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001; /* Ensure it's above other elements */
+}
+
+.hamburger {
+    display: block;
+    position: relative;
+    width: 25px;
+    height: 3px;
+    background: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 25px;
+    height: 3px;
+    background: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger::before {
+    transform: translateY(-8px);
+}
+
+.hamburger::after {
+    transform: translateY(8px);
+}
+
+/* Hamburger animation when active */
+.nav-open .hamburger {
+    background: transparent; /* Middle line disappears */
+}
+
+.nav-open .hamburger::before {
+    transform: rotate(45deg);
+}
+
+.nav-open .hamburger::after {
+    transform: rotate(-45deg);
+}
+
+/* Scrolled header state */
+header.scrolled .nav-links {
+    display: none; /* Hide regular nav links when scrolled on mobile */
+}
+
+header.scrolled .nav-toggle {
+    display: block; /* Show hamburger when scrolled */
+}
+
 /* Hero Section with Glassmorphism */
 .hero {
     padding: 6rem 0 4rem;
@@ -516,45 +576,103 @@ nav a:hover::after {
 
 /* Мобильная версия слайдера */
 @media (max-width: 768px) {
-    .volume-slider-container.active {
-        width: 100px;
-        height: 40px;
-        transform: translateY(-50%) translateX(0);
-        padding: 0 10px;
+    .about-content, .contact-content {
+        flex-direction: column;
     }
     
-    .volume-slider {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 80px;
-        height: 6px;
-        transform: none;
-        background-color: #ccc;
-        outline: none;
-        border-radius: 4px;
-        pointer-events: all;
-        margin: 0 auto;
-        display: block;
-        padding: 0;
-        position: relative;
-        cursor: pointer;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        .volume-slider {
-            background-color: #555;
-        }
-    }
-
     .about-image {
         flex: none;
         height: auto;
         max-width: 280px;
         margin: 0 auto 2rem auto;
+        width: 100%;
     }
-
+    
     .about-image img {
         max-height: 350px;
+        object-fit: cover;
+        width: 100%;
+    }
+    
+    .tracks-container {
+        grid-template-columns: 1fr;
+    }
+    
+    header .container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .nav-toggle {
+        display: block;
+    }
+
+    nav .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--glassmorphism-bg);
+        box-shadow: var(--glassmorphism-shadow);
+        padding: 1rem 0;
+        border-top: var(--glassmorphism-border);
+    }
+
+    nav .nav-links.active {
+        display: flex;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 0;
+    }
+
+    nav .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+
+    nav .nav-links li a {
+        display: block;
+        padding: 0.75rem 1rem;
+        width: 100%;
+    }
+    
+    .hero h2 {
+        font-size: 2.2rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .volume-slider-container {
+        bottom: auto;
+        right: 100%;
+        left: auto;
+        top: 50%;
+        transform: translateY(-50%) translateX(10px);
+        width: 0;
+        height: 30px;
+    }
+    
+    .volume-control:hover .volume-slider-container {
+        width: 100px;
+        height: 30px;
+        transform: translateY(-50%) translateX(0);
+    }
+    
+    .volume-slider {
+        width: 80px;
+        height: 6px;
+        transform: none;
     }
 }
 
@@ -690,68 +808,6 @@ footer {
     }
 }
 
-@media (max-width: 768px) {
-    .about-content, .contact-content {
-        flex-direction: column;
-    }
-    
-    .about-image {
-        flex: none;
-        height: auto;
-        max-width: 280px;
-        margin: 0 auto 2rem auto;
-    }
-    
-    .about-image img {
-        max-height: 350px;
-    }
-    
-    .tracks-container {
-        grid-template-columns: 1fr;
-    }
-    
-    header .container {
-        flex-direction: row;
-        justify-content: space-between;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
-    
-    nav ul {
-        gap: 1rem;
-    }
-    
-    .hero h2 {
-        font-size: 2.2rem;
-    }
-    
-    .hero p {
-        font-size: 1.1rem;
-    }
-    
-    .volume-slider-container {
-        bottom: auto;
-        right: 100%;
-        left: auto;
-        top: 50%;
-        transform: translateY(-50%) translateX(10px);
-        width: 0;
-        height: 30px;
-    }
-    
-    .volume-control:hover .volume-slider-container {
-        width: 100px;
-        height: 30px;
-        transform: translateY(-50%) translateX(0);
-    }
-    
-    .volume-slider {
-        width: 80px;
-        height: 6px;
-        transform: none;
-    }
-}
-
 @media (max-width: 480px) {
     h1 {
         font-size: 2rem;
@@ -766,7 +822,7 @@ footer {
     }
     
     .volume-control {
-        display: none;
+        display: block;
     }
     
     .time {
@@ -786,13 +842,21 @@ footer {
     }
     
     .comparison-toggle {
-        width: 160px;
+        width: 180px;
     }
     
     nav ul {
         flex-direction: column;
         align-items: center;
         gap: 0.8rem;
+    }
+
+    header.scrolled h1 {
+        display: block;
+    }
+    
+    header.scrolled .nav-links {
+        display: none !important;
     }
 }
 
