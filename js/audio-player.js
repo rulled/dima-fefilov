@@ -238,10 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Ошибка загрузки трека: ${audio.src}`);
         });
         
-        // Предзагрузка метаданных для правильного отображения времени
+        // Показываем общую длительность трека
+        const totalTimeDisplay = audio.parentElement.querySelector('.total-time');
         audio.addEventListener('loadedmetadata', () => {
-            const totalMinutes = Math.floor(audio.duration / 60);
-            const totalSeconds = Math.floor(audio.duration % 60);
+            const totalDuration = audio.duration;
+            const totalMinutes = Math.floor(totalDuration / 60);
+            const totalSeconds = Math.floor(totalDuration % 60);
+            const formattedTotalTime = `${totalMinutes.toString().padStart(2, '0')}:${totalSeconds.toString().padStart(2, '0')}`;
+            if (totalTimeDisplay) totalTimeDisplay.textContent = ` / ${formattedTotalTime}`;
             timeDisplay.textContent = `00:00`;
         });
         
@@ -260,6 +264,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 1500); // Задержка, чтобы пользователь успел взаимодействовать
                 });
             }
+        }
+
+        const volumeButton = volumeControl?.querySelector('.volume-button');
+        const volumeSliderContainer = volumeControl?.querySelector('.volume-slider-container');
+
+        // Новый механизм показа/скрытия слайдера громкости
+        if (volumeButton && volumeSliderContainer) {
+            volumeButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                volumeSliderContainer.classList.toggle('active');
+            });
+            document.addEventListener('click', (e) => {
+                if (volumeSliderContainer.classList.contains('active') && !volumeControl.contains(e.target)) {
+                    volumeSliderContainer.classList.remove('active');
+                }
+            });
         }
     }
     
