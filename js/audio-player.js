@@ -193,18 +193,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Регулировка громкости
         if (volumeSlider) {
+            // Инвертируем значения для вертикального слайдера (0 = сверху, 1 = снизу)
+            // Чтобы логика была естественной: вверх - громче, вниз - тише
+            
             volumeSlider.addEventListener('input', () => {
-                audio.volume = volumeSlider.value;
+                // Инвертируем значение для вертикального слайдера
+                const volumeValue = parseFloat(volumeSlider.value);
+                
+                // Устанавливаем громкость (0-1)
+                audio.volume = volumeValue;
                 
                 // Сохраняем громкость в localStorage для всех плееров
-                localStorage.setItem('audio-volume', volumeSlider.value);
+                localStorage.setItem('audio-volume', volumeValue);
                 
                 // Обновляем громкость на всех остальных плеерах
                 document.querySelectorAll('.volume-slider').forEach(slider => {
-                    slider.value = volumeSlider.value;
+                    slider.value = volumeValue;
                 });
                 document.querySelectorAll('audio').forEach(otherAudio => {
-                    otherAudio.volume = volumeSlider.value;
+                    otherAudio.volume = volumeValue;
                 });
             });
             
@@ -214,8 +221,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 volumeSlider.value = savedVolume;
                 audio.volume = savedVolume;
             } else {
-                audio.volume = volumeSlider.value;
+                // Устанавливаем дефолтную громкость на 80%
+                volumeSlider.value = "0.8";
+                audio.volume = 0.8;
             }
+            
+            // Дополнительные обработчики для улучшения взаимодействия со слайдером
+            volumeSlider.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
+            
+            volumeSlider.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+            });
         }
         
         // Обработка окончания трека

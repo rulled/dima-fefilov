@@ -472,7 +472,7 @@ nav a:hover::after {
 .volume-slider-container {
     opacity: 0;
     height: 0;
-    width: 40px;
+    width: 30px;
     pointer-events: none;
     transition: height 0.3s ease, opacity 0.3s ease, transform 0.3s ease, width 0.3s ease;
     position: absolute;
@@ -480,7 +480,7 @@ nav a:hover::after {
     bottom: 100%;
     transform: translateX(-50%) translateY(10px);
     z-index: 1;
-    background-color: rgba(240, 240, 240, 0.9);
+    background-color: rgba(240, 240, 240, 0.85);
     border-radius: 10px;
     padding: 10px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
@@ -507,7 +507,7 @@ nav a:hover::after {
 /* Мобильная версия слайдера */
 @media (max-width: 768px) {
     .volume-slider-container.active {
-        width: 120px;
+        width: 100px;
         height: 40px;
         transform: translateY(-50%) translateX(0);
         padding: 0 10px;
@@ -515,20 +515,20 @@ nav a:hover::after {
     
     .volume-slider {
         width: 80px;
-        height: 8px;
+        height: 6px;
         transform: none;
     }
 }
 
 .volume-slider {
-    width: 8px;
+    width: 6px;
     height: 80px;
     -webkit-appearance: none;
     appearance: none;
     background-color: #ccc;
     outline: none;
     border-radius: 4px;
-    transform: rotate(180deg);
+    transform: rotate(0deg);
     pointer-events: all;
     margin: 0 auto;
     display: block;
@@ -701,7 +701,7 @@ footer {
     
     .volume-slider {
         width: 80px;
-        height: 4px;
+        height: 6px;
         transform: none;
     }
 }
